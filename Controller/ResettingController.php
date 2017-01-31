@@ -38,6 +38,8 @@ class ResettingController extends Controller
      */
     public function requestAction()
     {
+        // TODO
+
         return $this->render('@FOSUser/Resetting/request.html.twig');
     }
 

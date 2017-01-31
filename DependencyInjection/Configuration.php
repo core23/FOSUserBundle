@@ -76,6 +76,7 @@ class Configuration implements ConfigurationInterface
                 ->thenInvalid('You need to specify your own group manager service when using the "custom" driver.')
             ->end();
 
+        $this->addLoginSection($rootNode);
         $this->addProfileSection($rootNode);
         $this->addChangePasswordSection($rootNode);
         $this->addRegistrationSection($rootNode);
@@ -84,6 +85,34 @@ class Configuration implements ConfigurationInterface
         $this->addGroupSection($rootNode);
 
         return $treeBuilder;
+    }
+
+    /**
+     * @param ArrayNodeDefinition $node
+     */
+    private function addLoginSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('login')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->fixXmlConfig('validation_group')
+                            ->children()
+                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\LoginFormType'))->end()
+                                ->scalarNode('name')->defaultValue('fos_user_login_form')->end()
+                                ->arrayNode('validation_groups')
+                                    ->prototype('scalar')->end()
+                                    ->defaultValue(array('Login', 'Default'))
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 
     /**
@@ -188,6 +217,17 @@ class Configuration implements ConfigurationInterface
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
                                     ->defaultValue(array('ResetPassword', 'Default'))
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('request_form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\ResettingRequestFormType'))->end()
+                                ->scalarNode('name')->defaultValue('fos_user_resetting_request_form')->end()
+                                ->arrayNode('validation_groups')
+                                    ->prototype('scalar')->end()
+                                    ->defaultValue(array('ResetRequest', 'Default'))
                                 ->end()
                             ->end()
                         ->end()

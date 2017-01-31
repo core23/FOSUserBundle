@@ -106,6 +106,10 @@ class FOSUserExtension extends Extension
             ),
         ));
 
+        if (!empty($config['login'])) {
+            $this->loadLogin($config['login'], $container, $loader);
+        }
+
         if (!empty($config['profile'])) {
             $this->loadProfile($config['profile'], $container, $loader);
         }
@@ -125,6 +129,20 @@ class FOSUserExtension extends Extension
         if (!empty($config['group'])) {
             $this->loadGroups($config['group'], $container, $loader, $config['db_driver']);
         }
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     * @param XmlFileLoader    $loader
+     */
+    private function loadLogin(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $loader->load('login.xml');
+
+        $this->remapParametersNamespaces($config, $container, array(
+            'form' => 'fos_user.login.form.%s',
+        ));
     }
 
     /**

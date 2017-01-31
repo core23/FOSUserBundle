@@ -17,6 +17,11 @@ All available configuration options are listed below with their default values.
         from_email:
             address:        webmaster@example.com
             sender_name:    webmaster
+        login:
+            form:
+                type:               FOS\UserBundle\Form\Type\LoginFormType # or 'fos_user_login' on Symfony < 2.8
+                name:               fos_user_login_form
+                validation_groups:  [Login, Default]
         profile:
             form:
                 type:               FOS\UserBundle\Form\Type\ProfileFormType # or 'fos_user_profile' on Symfony < 2.8
@@ -49,6 +54,10 @@ All available configuration options are listed below with their default values.
                 type:               FOS\UserBundle\Form\Type\ResettingFormType # or 'fos_user_resetting' on Symfony < 2.8
                 name:               fos_user_resetting_form
                 validation_groups:  [ResetPassword, Default]
+            request_form:
+                type:               FOS\UserBundle\Form\Type\ResettingRequestFormType # or 'fos_user_resetting_request' on Symfony < 2.8
+                name:               fos_user_resetting_request_form
+                validation_groups:  [ResetRequest, Default]
         service:
             mailer:                 fos_user.mailer.default
             email_canonicalizer:    fos_user.util.canonicalizer.default
