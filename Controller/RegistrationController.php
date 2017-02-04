@@ -118,7 +118,11 @@ class RegistrationController extends Controller
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
+            if ($this->getUser() instanceof UserInterface) {
+                return $this->redirectToRoute('fos_user_registration_confirmed');
+            } else {
+                return $this->redirectToRoute('fos_user_security_login');
+            }
         }
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
